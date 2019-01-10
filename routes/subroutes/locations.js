@@ -5,21 +5,21 @@ const router = express.Router();
 const checkAuth = require('../../middleware/check-auth');
 const Database = require('../../config/database');
 
-
 router.get('', checkAuth,
 (req, res, next) =>{
   let database = new Database();
-  database.query(`SELECT * FROM tax_groups
+  database.query(`SELECT
+  id, naziv_lokacije, pozicija
+ FROM bot_locations
   `)
-    .then( (artikli) =>{
-        database.close();
+    .then( (locations) =>{
+      database.close();
         res.status(200).json({
           message: 'Success',
-          data: artikli
+          data: locations
         });
       }
-    )
-    .catch( err => {
+    ).catch( err => {
       if(err === 'disconnected'){
         return res.status(500).json({
           message: 'Databse server down',
@@ -28,7 +28,37 @@ router.get('', checkAuth,
       }
       database.close();
       return res.status(500).json({
-        message: 'Could not retrive suppliers',
+        messgae: 'Could not retrive locations',
+        error : err
+      });
+    });
+});
+router.get('/articles/:id', checkAuth,
+(req, res, next) =>{
+  let database = new Database();
+  database.query(`SELECT
+  article_id, location_id, name, indeks
+  FROM bot_location_articles
+  left join articles on articles.id = bot_location_articles.article_id
+  where location_id = ?
+  order by indeks`, req.params.id )
+    .then( (articles) =>{
+      database.close();
+        res.status(200).json({
+          message: 'Success',
+          data: articles
+        });
+      }
+    ).catch( err => {
+      if(err === 'disconnected'){
+        return res.status(500).json({
+          message: 'Databse server down',
+          error : err
+        });
+      }
+      database.close();
+      return res.status(500).json({
+        messgae: 'Could not retrive articles',
         error : err
       });
     });
@@ -37,13 +67,18 @@ router.get('', checkAuth,
 router.post('', checkAuth,
   (req,res, next) => {
     let database = new Database();
-    let jsondata = req.body;
-    database.query(`INSERT INTO tax_groups SET ?`, jsondata)
+    let insertId = 0;
+    let jsonMaster = {
+      naziv_lokacije : req.body.location_name,
+      pozicija: req.body.position,
+    };
+    database.query(`INSERT INTO bot_locations SET ?`, [jsonMaster])
     .then((results) =>{
+      insertId = results.insertId;
       database.close();
       res.status(200).json({
         message: 'Success',
-        data: results.insertId
+        data: insertId
       });
     })
     .catch( err => {
@@ -64,16 +99,12 @@ router.post('', checkAuth,
   router.put('/:id', checkAuth,
   (req,res,next) => {
     let database = new Database();
-    database.query(`UPDATE tax_groups SET
-    name = ?,
-    tax_1 = ?,
-    tax_2 = ?
+    database.query(`UPDATE bot_locations SET
+    naziv_lokacije = ?,
     WHERE id = ?`, [
-      req.body.name,
-      req.body.tax_1,
-      req.body.tax_2,
+      req.body.location_name,
       req.params.id] )
-    .then((results) =>{
+    .then( (results) => {
       database.close();
       res.status(200).json({
         message: 'Success',
@@ -93,12 +124,11 @@ router.post('', checkAuth,
         error: err
       })
     });
-  });
-
-  router.delete('/:id', checkAuth,
+});
+router.delete('/:id', checkAuth,
     (req,res,next) => {
       let database = new Database();
-      database.query('DELETE FROM tax_groups WHERE id = ?', req.params.id )
+      database.query('DELETE FROM bot_locations WHERE id = ?', req.params.id )
       .then((results) =>{
         database.close();
         res.status(200).json({
@@ -119,6 +149,6 @@ router.post('', checkAuth,
           error: err
         })
       });
-  });
+});
 
 module.exports = router;
