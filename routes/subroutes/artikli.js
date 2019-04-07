@@ -5,13 +5,12 @@ const router = express.Router();
 const checkAuth = require('../../middleware/check-auth');
 const Database = require('../../config/database');
 
-router.get('', checkAuth,
+router.get('',
 (req, res, next) =>{
   let database = new Database();
   database.query(`SELECT
-  id, barcode, tax_group_id, amount, price_buy, price_sell, unit, name, display, prikaz_group_id, art_show_gr_id, supplier_id, qty, box_qty, img_src
+  id, barcode, tax_group_id, amount, price_buy, price_sell, unit, name, display, art_group_id, art_type_id, supplier_id, volume, box_size, img_src
  FROM articles
- Left Join bot_articles_details on article_id = id;
   `)
     .then( (artikli) =>{
       database.close();
@@ -35,7 +34,7 @@ router.get('', checkAuth,
     });
 });
 
-router.post('', checkAuth,
+router.post('',
   (req,res, next) => {
     let database = new Database();
     let insertId = 0;
@@ -85,7 +84,7 @@ router.post('', checkAuth,
     });
   });
 
-  router.put('/:id', checkAuth,
+  router.put('/:id',
   (req,res,next) => {
     let database = new Database();
     database.query(`UPDATE articles SET
@@ -142,7 +141,7 @@ router.post('', checkAuth,
       })
     });
 });
-  router.delete('/:id', checkAuth,
+  router.delete('/:id',
     (req,res,next) => {
       let database = new Database();
       database.query('DELETE FROM articles WHERE id = ?', req.params.id )
