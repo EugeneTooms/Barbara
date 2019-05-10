@@ -9,7 +9,7 @@ router.get('',
 (req, res, next) =>{
   let database = new Database();
   database.query(`SELECT
-  id, barcode, tax_group_id, amount, price_buy, price_sell, unit, name, display, art_group_id, art_type_id, supplier_id, volume, box_size, img_src
+  id,  tax_group_id, amount, price_buy, price_sell, unit, name, display, art_group_id, art_type_id, supplier_id, volume, box_size, img_src
  FROM articles
   `)
     .then( (artikli) =>{
