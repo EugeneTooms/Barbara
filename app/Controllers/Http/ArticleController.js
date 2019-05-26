@@ -1,6 +1,5 @@
 'use strict'
 const Article = use('App/Models/Article')
-const ArticleGroup = use('App/Models/ArticleGroup')
 const Database = use('Database')
 
 class ArticleController {
@@ -9,6 +8,7 @@ class ArticleController {
       .select('articles.id', 'articles.name as name', 'articles.group_id', 'articles.packaging', 'articles.sku', 'articles.volume', 'articles.price', 'article_groups.name as group_name' )
       .from('articles')
       .leftJoin('article_groups', 'articles.group_id', 'article_groups.id')
+    Database.close();
     return {
       message: 'Success',
       data: articles
