@@ -21,14 +21,6 @@ class ArticleController {
       data: article
     }
   }
-  async byGroup({params}){
-    const articlegroup = await ArticleGroup.find(params.id);
-    const articles = await articlegroup.articles().fetch();
-    return {
-      message: 'Success',
-      data: articles
-    }
-  }
   async create({request}){
     const data = request.body;
 

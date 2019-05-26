@@ -1,5 +1,6 @@
 'use strict'
-const ArticleGroup = use('App/Models/ArticleGroup')
+const ArticleGroup = use('App/Models/ArticleGroup');
+
 class ArticleGroupController {
   async list(){
     const articlegroups = await ArticleGroup.all();
@@ -15,9 +16,16 @@ class ArticleGroupController {
       data: articlegroup
     }
   }
+  async articleList({params}){
+    const articlegroup = await ArticleGroup.find(params.id);
+    const articles = await articlegroup.articles().fetch();
+    return {
+      message: 'Success',
+      data: articles
+    }
+  }
   async create({request}){
     const data = request.body;
-
     try {
       await ArticleGroup.create(data)}
     catch(error){

@@ -7,7 +7,6 @@ Route.group(() =>{
   Route.get('/:id', 'ArticleController.single')
   Route.delete('/:id', 'ArticleController.delete')
   Route.post('/create', 'ArticleController.create')
-  Route.get('/bygroup/:id', 'ArticleController.byGroup')
 }).prefix(Env.get('APP_API_URL')+'articles')
 
 module.exports = Route
