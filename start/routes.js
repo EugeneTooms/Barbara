@@ -21,3 +21,5 @@ require('./routes/articles');
 require('./routes/articlegroups');
 //SUPPLIERS
 require('./routes/suppliers');
+//LOCATIONS
+require('./routes/locations');
