@@ -8,6 +8,9 @@ class Location extends Model {
     super.boot()
     this.addTrait('NoTimestamp')
   }
+  locations() {
+    return this.hasMany('App/Models/Location','id','parent_id')
+  }
 }
 
 module.exports = Location

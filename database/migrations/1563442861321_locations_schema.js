@@ -8,7 +8,8 @@ class LocationsSchema extends Schema {
     this.create('locations', (table) => {
       table.increments()
       table.string('name', 45).notNullable()
-      table.string('position', 8).notNullable()
+      table.integer('level')
+      table.integer('parent_id')
       table.timestamps()
     })
   }

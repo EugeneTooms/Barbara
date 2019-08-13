@@ -5,7 +5,7 @@ const Database = use('Database')
 class ArticleController {
   async list(){
     const articles = await Database
-      .select('articles.id', 'articles.name as name', 'articles.group_id', 'articles.packaging', 'articles.sku', 'articles.volume', 'articles.price', 'article_groups.name as group_name' )
+      .select('articles.id', 'articles.product_name', 'articles.name as name', 'articles.group_id', 'articles.packaging', 'articles.sku', 'articles.volume', 'articles.price', 'article_groups.name as group_name' )
       .from('articles')
       .leftJoin('article_groups', 'articles.group_id', 'article_groups.id')
     Database.close();

@@ -4,6 +4,7 @@ const Env = use('Env')
 
 Route.group(() =>{
   Route.get('/', 'LocationController.list')
+  Route.get('/:id/locations', 'LocationController.locationList')
   //Route.get('/:id', 'SupplierController.single')
   //Route.delete('/:id', 'SupplierController.delete')
   //Route.post('/create', 'SupplierController.create')

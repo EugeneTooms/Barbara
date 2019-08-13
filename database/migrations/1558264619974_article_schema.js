@@ -8,6 +8,7 @@ class ArticleSchema extends Schema {
     this.create('articles', (table) => {
       table.increments()
       table.string('name', 128).notNullable()
+      table.string('product_name', 128)
       table.integer('group_id').unsigned().references('id').inTable('article_groups')
       table.string('packaging', 64).notNullable()
       table.string('sku', 64).notNullable()
